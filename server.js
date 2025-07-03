@@ -2,20 +2,23 @@ import express from "express";
 import path, { dirname } from "path";
 import { fileURLToPath } from "url";
 import morgan from "morgan";
-import bodyParser from "body-parser";
 
 const app = express();
 const port = 1500;
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
 // Middleware
-app.use(bodyParser.urlencoded({ extended: true })); //app.use(express.urlencoded({ extended: true }));
+app.use(express.urlencoded({ extended: true }));
 app.use(morgan("combined"));
 app.use(express.static(path.join(__dirname, "Views")));
 
+//Set up EJS
+app.set("view engine", "ejs");
+app.set("views", path.join(__dirname, "Views"));
+
 // GET root route
 app.get("/", (req, res) => {
-  res.redirect("/login"); 
+  res.redirect("login"); 
 });
 
 // GET login route
@@ -24,7 +27,7 @@ app.get("/login", (req, res) => {
 });
 
 app.get("/home", (req, res) => {
-  res.sendFile(path.join(__dirname, "Views", "main.html"));
+  res.render("main");
 });
 
 // POST login route
@@ -37,7 +40,7 @@ app.post("/login", (req, res) => {
   }
 
   if (email === "admin@gmail.com" && password === "1234") {
-    res.redirect("/home"); // Redirect to /main instead of /main.html
+    res.redirect("/home"); 
   } else {
     res.send("Wrong username or password");
   }
