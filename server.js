@@ -30,9 +30,13 @@ app.get("/home", (req, res) => {
   res.render("main");
 });
 
+app.get("/new", (req,res) => {
+  res.render("new")
+});
+
 app.get("/about", (req, res) =>{
   res.sendFile(path.join(__dirname, "Views", "about.html"));
-})
+});
 
 // POST login route
 app.post("/login", (req, res) => {
