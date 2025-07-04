@@ -20,7 +20,12 @@
     </header>
     <div class="main-buttons">
         <a href="/new" class="btn btn-primary btn-lg active new-button" role="button" aria-pressed="true">Create post</a>
-        <a href="#" class="btn btn-primary btn-lg active new-button" role="button" aria-pressed="true">View posts</a>
     </div>
+
+    <ul>
+        <% post.forEach((post, i) => { %>
+            <li><a href="/post/<%= i %>"><%= post.title %></a></li>
+        <% }) %>
+    </ul>
 </body> 
 </html>

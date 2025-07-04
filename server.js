@@ -7,6 +7,9 @@ const app = express();
 const port = 1500;
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
+//Store posts
+const post = [  { title: "First Post", content: "Hello world!" }];
+
 // Middleware
 app.use(express.urlencoded({ extended: true }));
 app.use(morgan("combined"));
@@ -27,7 +30,7 @@ app.get("/login", (req, res) => {
 });
 
 app.get("/home", (req, res) => {
-  res.render("main");
+  res.render("main", {post});
 });
 
 app.get("/new", (req,res) => {
@@ -37,6 +40,16 @@ app.get("/new", (req,res) => {
 app.get("/about", (req, res) =>{
   res.sendFile(path.join(__dirname, "Views", "about.html"));
 });
+
+app.get("/post/:id", (req, res) => {
+  const posts = post[req.params.id];
+  
+  if(posts){
+    res.render("post",{posts})
+  } else {
+    res.status(404).send("Post not found");
+  }
+})
 
 // POST login route
 app.post("/login", (req, res) => {
@@ -53,6 +66,14 @@ app.post("/login", (req, res) => {
     res.send("Wrong username or password");
   }
 });
+
+
+app.post("/new", (req, res) => {
+  const {title, content} = req.body;
+  post.push({title, content});
+  res.redirect("/home");
+})
+
 
 // Start server
 app.listen(port, () => {
